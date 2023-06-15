@@ -1,0 +1,11 @@
+[Unit]
+Description= Simple Coffee App Load Balancer
+After=network.target
+
+[Service]
+WorkingDirectory=/coffeeLoadBalancer
+ExecStart=/coffeeLoadBalancer/venv/bin/gunicorn app:app --bind 0.0.0.0:8080
+Type=simple
+
+[Install]
+WantedBy=default.target

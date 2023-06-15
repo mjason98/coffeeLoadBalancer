@@ -1,0 +1,18 @@
+#!/bin/bash
+
+yes | sudo apt update
+sudo apt-get install -y python3-pip
+sudo apt-get install -y python3-venv
+
+git clone https://github.com/mjason98/coffeeLoadBalancer.git
+
+python3 -m venv coffeeLoadBalancer/venv
+source coffeeLoadBalancer/venv/bin/activate
+pip install -r coffeeLoadBalancer/requirements.txt
+
+sudo mv coffeeLoadBalancer/coffee.service /etc/systemd/system
+sudo systemctl daemon-reload
+sudo systemctl stop coffee
+sudo systemctl daemon-reload
+sudo systemctl enable coffee
+sudo systemctl start coffee

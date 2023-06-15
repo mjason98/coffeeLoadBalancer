@@ -8,18 +8,17 @@ load_dotenv()
 
 
 def get_ips():
-    json_fstr = {'IP_LIST': []}
+    json_fstr = {}
 
     with open(os.getenv('IP_LIST_PATH'), 'r') as file:
         doc = file.read()
         json_fstr = json.loads(doc)
 
-    return json_fstr['IP_LIST']
+    return json_fstr['IP_LIST'], json_fstr['IP_PORT']
 
 
-IP_LIST = get_ips()
+IP_LIST, PORT = get_ips()
 IP_POS = 0
-PORT = os.getenv("IP_PORT")
 
 app = Flask(__name__)
 

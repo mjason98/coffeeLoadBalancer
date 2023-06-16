@@ -1,21 +1,8 @@
 from flask import Flask, redirect
 from dotenv import load_dotenv
-import os
-import json
-
+from utils.get_ips import get_ips
 
 load_dotenv()
-
-
-def get_ips():
-    json_fstr = {}
-
-    with open(os.getenv('IP_LIST_PATH'), 'r') as file:
-        doc = file.read()
-        json_fstr = json.loads(doc)
-
-    return json_fstr['IP_LIST'], json_fstr['IP_PORT']
-
 
 IP_LIST, PORT = get_ips()
 IP_POS = 0

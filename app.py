@@ -1,16 +1,19 @@
 from flask import Flask, redirect
-from dotenv import load_dotenv
-import os
+# from dotenv import load_dotenv
+# import os
 import json
 
 
-load_dotenv()
+# load_dotenv()
 
 
 def get_ips():
     json_fstr = {}
 
-    with open(os.getenv('IP_LIST_PATH'), 'r') as file:
+
+    # dowload first the json_file from s3
+
+    with open('config.json', 'r') as file:
         doc = file.read()
         json_fstr = json.loads(doc)
 

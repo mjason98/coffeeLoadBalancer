@@ -1,17 +1,17 @@
 from flask import Flask, redirect
-# from dotenv import load_dotenv
-# import os
 import json
-
-
-# load_dotenv()
+import boto3
 
 
 def get_ips():
     json_fstr = {}
+    s3 = boto3.client('s3')
 
+    bucket_name = 'hs.ds'
+    file_key = 'config.json'
+    local_file_path = 'config.json'
 
-    # dowload first the json_file from s3
+    s3.download_file(bucket_name, file_key, local_file_path)
 
     with open('config.json', 'r') as file:
         doc = file.read()

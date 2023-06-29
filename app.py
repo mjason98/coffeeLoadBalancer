@@ -1,6 +1,7 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, abort
 import json
 import boto3
+import requests
 
 
 def get_ips():
@@ -13,16 +14,17 @@ def get_ips():
 
     s3.download_file(bucket_name, file_key, local_file_path)
 
-    with open('config.json', 'r') as file:
+    with open(local_file_path, 'r') as file:
         doc = file.read()
         json_fstr = json.loads(doc)
 
     return json_fstr['IP_LIST'], json_fstr['IP_PORT']
 
- 
+
 IP_LIST, PORT = get_ips()
 IP_POS = 0
 MAX_IT = 10 * len(IP_LIST)
+
 
 app = Flask(__name__)
 

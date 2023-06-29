@@ -19,9 +19,10 @@ def get_ips():
 
     return json_fstr['IP_LIST'], json_fstr['IP_PORT']
 
-
+ 
 IP_LIST, PORT = get_ips()
 IP_POS = 0
+MAX_IT = 10 * len(IP_LIST)
 
 app = Flask(__name__)
 
@@ -31,10 +32,23 @@ app = Flask(__name__)
 def catch_all(path):
     global IP_POS
 
-    new_url = f"http://{IP_LIST[IP_POS]}:{PORT}/{path}"
-    IP_POS = (IP_POS + 1) % len(IP_LIST)
+    counter = 0
+    while counter < MAX_IT:
+        url_i = f"http://{IP_LIST[IP_POS]}:{PORT}/v1/healthcheck"
+        response = requests.get(url_i)
 
-    return redirect(new_url, code=302)
+        if response.status_code == 200:
+            break
+        else:
+            counter += 1
+            IP_POS = (IP_POS + 1) % len(IP_LIST)
+
+    if counter < MAX_IT:
+        new_url = f"http://{IP_LIST[IP_POS]}:{PORT}/{path}"
+        IP_POS = (IP_POS + 1) % len(IP_LIST)
+        return redirect(new_url, code=302)
+    else:
+        return abort(400)
 
 
 if __name__ == "__main__":

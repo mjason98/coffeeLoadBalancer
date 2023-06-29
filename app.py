@@ -1,10 +1,25 @@
-from flask import Flask, redirect, abort
-from dotenv import load_dotenv
-from utils.get_ips import get_ips
-import requests
+from flask import Flask, redirect
+import json
+import boto3
 
-load_dotenv()
 
+def get_ips():
+    json_fstr = {}
+    s3 = boto3.client('s3')
+
+    bucket_name = 'hs.ds'
+    file_key = 'config.json'
+    local_file_path = 'config.json'
+
+    s3.download_file(bucket_name, file_key, local_file_path)
+
+    with open('config.json', 'r') as file:
+        doc = file.read()
+        json_fstr = json.loads(doc)
+
+    return json_fstr['IP_LIST'], json_fstr['IP_PORT']
+
+ 
 IP_LIST, PORT = get_ips()
 IP_POS = 0
 MAX_IT = 10 * len(IP_LIST)
